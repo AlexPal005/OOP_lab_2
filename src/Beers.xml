@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="WINDOWS-1251" standalone="no"?>
+<Beers>
+    <Beer id="1" name="Львівське">
+        <type>Світле</type>
+        <alcohol>Так</alcohol>
+        <manufacturer>Львів фабрика</manufacturer>
+        <ingredients>Вода, солод, дріджі</ingredients>
+        <number_turns>3.4</number_turns>
+        <transparency>10.0</transparency>
+        <nutritional_value>500.0</nutritional_value>
+    </Beer>
+    <Beer id="2" name="Corona">
+        <type>Міцне</type>
+        <alcohol>Так</alcohol>
+        <manufacturer>Київ фабрика</manufacturer>
+        <ingredients>Вода, солод, цукор</ingredients>
+        <number_turns>5.0</number_turns>
+        <transparency>15.0</transparency>
+        <nutritional_value>700.0</nutritional_value>
+    </Beer>
+</Beers>
