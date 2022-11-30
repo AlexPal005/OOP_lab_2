@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="Beers">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Beer" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name = "type" maxOccurs="unbounded" minOccurs="0" type="xs:string"/>
+                            <xs:element name = "alcohol" maxOccurs="unbounded" minOccurs="0" type="xs:string"/>
+                            <xs:element name = "manufacturer" maxOccurs="unbounded" minOccurs="0" type="xs:string"/>
+                            <xs:element name = "ingredients" maxOccurs="unbounded" minOccurs="0" type="xs:string"/>
+                            <xs:element name = "number_turns" maxOccurs="unbounded" minOccurs="0" type="xs:double"/>
+                            <xs:element name = "transparency" maxOccurs="unbounded" minOccurs="0" type="xs:double"/>
+                            <xs:element name = "nutritional_value" maxOccurs="unbounded" minOccurs="0" type="xs:double"/>
+                        </xs:sequence>
+                    <xs:attribute name ="id" type = "xs:int" />
+                    <xs:attribute name="name" type = "xs:string"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

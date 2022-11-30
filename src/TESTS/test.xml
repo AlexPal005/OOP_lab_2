@@ -5,7 +5,7 @@
         <alcohol>Так</alcohol>
         <manufacturer>Львів фабрика</manufacturer>
         <ingredients>Вода, солод, дріджі</ingredients>
-        <number_turns>5</number_turns>
+        <number_turns>3.4</number_turns>
         <transparency>10.0</transparency>
         <nutritional_value>500.0</nutritional_value>
     </Beer>
@@ -14,7 +14,7 @@
         <alcohol>Так</alcohol>
         <manufacturer>Київ фабрика</manufacturer>
         <ingredients>Вода, солод, цукор</ingredients>
-        <number_turns>4</number_turns>
+        <number_turns>5.0</number_turns>
         <transparency>15.0</transparency>
         <nutritional_value>700.0</nutritional_value>
     </Beer>

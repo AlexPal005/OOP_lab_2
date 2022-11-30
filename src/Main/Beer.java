@@ -1,21 +1,16 @@
 package Main;
 
-import java.util.List;
-
 public class Beer {
-    private String name;
+    private String name, type, manufacturer, ingredients;
     private int id;
-    private String type;
     private boolean al;
-    private String manufacturer;
-    private String ingredients;
     // chars
-    private double number_turns;
+    private double numberTurns;
     private double transparency;
-    private double nutritional_value;
+    private double nutritionalValue;
 
     public Beer(String name, int id, String type, boolean al, String manufacturer, String ingredients,
-                double number_turns, double transparency, double nutritional_value){
+                double numberTurns, double transparency, double nutritionalValue){
 
         this.name = name;
         this.id = id;
@@ -23,21 +18,21 @@ public class Beer {
         this.al = al;
         this.manufacturer = manufacturer;
         this.ingredients = ingredients;
-        this.number_turns = number_turns;
+        this.numberTurns = numberTurns;
         this.transparency = transparency;
-        this.nutritional_value = nutritional_value;
+        this.nutritionalValue = nutritionalValue;
     }
     @Override
     public String toString(){
         return  "Name:            " + name + "\n" +
                 "id:              " + id + "\n" +
-                "Tupe:            " + type + "\n" +
+                "Type:            " + type + "\n" +
                 "Alcohol:         " + al + "\n" +
                 "Manufacturer:    " + manufacturer + "\n" +
                 "Ingredients:     " + ingredients + "\n" +
-                "Number turns:    " + number_turns + "\n" +
+                "Number turns:    " + numberTurns + "\n" +
                 "Transparency:    " + transparency + "\n" +
-                "Nutrition value: " + nutritional_value + "\n";
+                "Nutrition value: " + nutritionalValue + "\n";
     }
 
     public String getName() {
@@ -63,15 +58,51 @@ public class Beer {
         return ingredients;
     }
 
-    public double getNumber_turns() {
-        return number_turns;
+    public double getNumberTurns() {
+        return numberTurns;
     }
 
     public double getTransparency() {
         return transparency;
     }
 
-    public double getNutritional_value() {
-        return nutritional_value;
+    public double getNutritionalValue() {
+        return nutritionalValue;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void setAl(boolean al) {
+        this.al = al;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNumberTurns(double numberTurns) {
+        this.numberTurns = numberTurns;
+    }
+
+    public void setNutritionalValue(double nutritionalValue) {
+        this.nutritionalValue = nutritionalValue;
+    }
+
+    public void setTransparency(double transparency) {
+        this.transparency = transparency;
     }
 }

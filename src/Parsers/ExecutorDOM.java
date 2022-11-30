@@ -1,4 +1,4 @@
-package DOM_parser;
+package Parsers;
 
 import Main.*;
 import org.w3c.dom.Document;
@@ -6,24 +6,23 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.util.List;
 
-public class Executor {
+public class ExecutorDOM {
     private List<Beer> beers;
-    public Executor(List<Beer> beers){
+    private final String xmlLink;
+    public ExecutorDOM(List<Beer> beers, String xmlLink){
         this.beers = beers;
+        this.xmlLink = xmlLink;
     }
-    public void save_to_file(){
+    public void saveToFile(){
         try{
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -53,13 +52,13 @@ public class Executor {
                 ingredients.setTextContent(beers.get(i).getIngredients());
 
                 Element number_turns = document.createElement("number_turns");
-                number_turns.setTextContent(Double.toString(beers.get(i).getNumber_turns()));
+                number_turns.setTextContent(Double.toString(beers.get(i).getNumberTurns()));
 
                 Element transparency = document.createElement("transparency");
                 transparency.setTextContent(Double.toString(beers.get(i).getTransparency()));
 
                 Element nutritional_value = document.createElement("nutritional_value");
-                nutritional_value.setTextContent(Double.toString(beers.get(i).getNutritional_value()));
+                nutritional_value.setTextContent(Double.toString(beers.get(i).getNutritionalValue()));
 
                 beer.appendChild(type);
                 beer.appendChild(al);
@@ -75,7 +74,7 @@ public class Executor {
             transformer.setOutputProperty(OutputKeys.ENCODING, "WINDOWS-1251");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource domSource = new DOMSource(document);
-            StreamResult streamResult = new StreamResult(new File("src\\Beers.xml"));
+            StreamResult streamResult = new StreamResult(new File(xmlLink));
             transformer.transform(domSource, streamResult);
         }catch (ParserConfigurationException pce) {
             pce.printStackTrace();
@@ -83,53 +82,48 @@ public class Executor {
             throw new RuntimeException(e);
         }
     }
-    public void load_from_file(){
+    public void loadFromFile(){
         try {
-            //SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            //Schema s = sf.newSchema(new File("src\\Part_1\\Airport.xsd"));
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            //factory.setValidating(false);
-            //factory.setSchema(s);
             DocumentBuilder builder;
             builder = factory.newDocumentBuilder();
-            //builder.setErrorHandler(new SimpleErrorHandler());
-            Document document = builder.parse("src\\Beers.xml");
+            Document document = builder.parse(xmlLink);
 
-            NodeList nodelist_beers = document.getElementsByTagName("Beer");
+            NodeList nodelistBeers = document.getElementsByTagName("Beer");
 
-            for (int i = 0; i < nodelist_beers.getLength(); i++) {
-                Element beer = (Element) nodelist_beers.item(i);
-                beers.add(create_object_beer(beer));
+            for (int i = 0; i < nodelistBeers.getLength(); i++) {
+                Element beer = (Element) nodelistBeers.item(i);
+                beers.add(createObjectBeer(beer));
 
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    private Beer create_object_beer(Element el){
+    private Beer createObjectBeer(Element el){
         int id = Integer.parseInt(el.getAttribute("id"));
         String name = el.getAttribute("name");
         String type = getTagValue("type", el);
         String al = getTagValue("alcohol", el);
-        boolean al_val;
+        boolean alVal;
         if(al.equals("Ні")){
-            al_val = false;
+            alVal = false;
         }
         else{
-            al_val = true;
+            alVal = true;
         }
         String manudacturer = getTagValue("manufacturer", el);
         String ingredients = getTagValue("ingredients", el);
-        String number_turns = getTagValue("number_turns",el);
+        String numberTurns = getTagValue("number_turns",el);
         String transparency = getTagValue("transparency", el);
-        String nutritional_value = getTagValue("nutritional_value", el);
+        String nutritionalValue = getTagValue("nutritional_value", el);
 
-        return new Beer(name,id, type, al_val,manudacturer, ingredients,Double.parseDouble(number_turns),
-                Double.parseDouble(transparency), Double.parseDouble(nutritional_value));
+        return new Beer(name,id, type, alVal,manudacturer, ingredients,Double.parseDouble(numberTurns),
+                Double.parseDouble(transparency), Double.parseDouble(nutritionalValue));
     }
     private String getTagValue(String tag, Element element) {
         NodeList nodeList = element.getElementsByTagName(tag).item(0).getChildNodes();
-        Node node = (Node) nodeList.item(0);
+        Node node = nodeList.item(0);
         return node.getNodeValue();
     }
 }
