@@ -18,46 +18,48 @@ import java.util.List;
 public class ExecutorDOM {
     private List<Beer> beers;
     private final String xmlLink;
-    public ExecutorDOM(List<Beer> beers, String xmlLink){
+    private Tags tags;
+    public ExecutorDOM(List<Beer> beers, String xmlLink, Tags tags){
         this.beers = beers;
         this.xmlLink = xmlLink;
+        this.tags = tags;
     }
     public void saveToFile(){
         try{
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
             Document document = documentBuilder.newDocument();
-            Element root = document.createElement("Beers");
+            Element root = document.createElement(tags.beers());
             document.appendChild(root);
             for (int i = 0; i < beers.size(); i++) {
-                Element beer = document.createElement("Beer");
-                beer.setAttribute("id", Integer.toString(beers.get(i).getId()));
-                beer.setAttribute("name", beers.get(i).getName());
+                Element beer = document.createElement(tags.beer());
+                beer.setAttribute(tags.id(), Integer.toString(beers.get(i).getId()));
+                beer.setAttribute(tags.name(), beers.get(i).getName());
                 root.appendChild(beer);
 
-                Element type = document.createElement("type");
+                Element type = document.createElement(tags.type());
                 type.setTextContent(beers.get(i).getType());
 
-                Element al = document.createElement("alcohol");
+                Element al = document.createElement(tags.alcohol());
                 if(beers.get(i).getAl()){
-                    al.setTextContent("Так");
+                    al.setTextContent("Yes");
                 }else{
-                    al.setTextContent("Ні");
+                    al.setTextContent("No");
                 }
 
-                Element manufacturer = document.createElement("manufacturer");
+                Element manufacturer = document.createElement(tags.manufacturer());
                 manufacturer.setTextContent(beers.get(i).getManufacturer());
 
-                Element ingredients = document.createElement("ingredients");
+                Element ingredients = document.createElement(tags.ingredients());
                 ingredients.setTextContent(beers.get(i).getIngredients());
 
-                Element number_turns = document.createElement("number_turns");
+                Element number_turns = document.createElement(tags.numberTurns());
                 number_turns.setTextContent(Double.toString(beers.get(i).getNumberTurns()));
 
-                Element transparency = document.createElement("transparency");
+                Element transparency = document.createElement(tags.transparency());
                 transparency.setTextContent(Double.toString(beers.get(i).getTransparency()));
 
-                Element nutritional_value = document.createElement("nutritional_value");
+                Element nutritional_value = document.createElement(tags.nutritionalValue());
                 nutritional_value.setTextContent(Double.toString(beers.get(i).getNutritionalValue()));
 
                 beer.appendChild(type);
@@ -89,7 +91,7 @@ public class ExecutorDOM {
             builder = factory.newDocumentBuilder();
             Document document = builder.parse(xmlLink);
 
-            NodeList nodelistBeers = document.getElementsByTagName("Beer");
+            NodeList nodelistBeers = document.getElementsByTagName(tags.beer());
 
             for (int i = 0; i < nodelistBeers.getLength(); i++) {
                 Element beer = (Element) nodelistBeers.item(i);
@@ -101,22 +103,22 @@ public class ExecutorDOM {
         }
     }
     private Beer createObjectBeer(Element el){
-        int id = Integer.parseInt(el.getAttribute("id"));
-        String name = el.getAttribute("name");
-        String type = getTagValue("type", el);
-        String al = getTagValue("alcohol", el);
+        int id = Integer.parseInt(el.getAttribute(tags.id()));
+        String name = el.getAttribute(tags.name());
+        String type = getTagValue(tags.type(), el);
+        String al = getTagValue(tags.alcohol(), el);
         boolean alVal;
-        if(al.equals("Ні")){
+        if(al.equals("No")){
             alVal = false;
         }
         else{
             alVal = true;
         }
-        String manudacturer = getTagValue("manufacturer", el);
-        String ingredients = getTagValue("ingredients", el);
-        String numberTurns = getTagValue("number_turns",el);
-        String transparency = getTagValue("transparency", el);
-        String nutritionalValue = getTagValue("nutritional_value", el);
+        String manudacturer = getTagValue(tags.manufacturer(), el);
+        String ingredients = getTagValue(tags.ingredients(), el);
+        String numberTurns = getTagValue(tags.numberTurns(),el);
+        String transparency = getTagValue(tags.transparency(), el);
+        String nutritionalValue = getTagValue(tags.nutritionalValue(), el);
 
         return new Beer(name,id, type, alVal,manudacturer, ingredients,Double.parseDouble(numberTurns),
                 Double.parseDouble(transparency), Double.parseDouble(nutritionalValue));

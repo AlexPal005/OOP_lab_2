@@ -3,6 +3,7 @@ import Main.Beer;
 import Parsers.ExecutorDOM;
 import Parsers.ExecutorSAX;
 import Parsers.ExecutorStAX;
+import Parsers.Tags;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -18,9 +19,13 @@ import static org.junit.Assert.*;
 public class TestParser {
     private final String xmlLink;
     private List<Beer> beersResult;
+    private Tags tags;
     public TestParser(){
         this.xmlLink ="src\\TESTS\\test.xml";
         createBeersResult();
+        tags = new Tags("Beers", "Beer","id", "name", "type", "alcohol",
+                "manufacturer", "ingredients","number_turns",
+                "transparency", "nutritional_value");
     }
     private void createBeersResult(){
         beersResult= new ArrayList<>();
@@ -32,21 +37,21 @@ public class TestParser {
         beersResult.add(beer2);
     }
     @Test
-    public void testDOM(){
+    public void testLoadFromFileDOM(){
         List<Beer> beers = new ArrayList<>();
-        ExecutorDOM executorDOM = new ExecutorDOM(beers,xmlLink);
+        ExecutorDOM executorDOM = new ExecutorDOM(beers,xmlLink,tags);
         executorDOM.loadFromFile();
         for (int i = 0; i < beersResult.size(); i++) {
             assertEquals(beersResult.get(i).getName(), beers.get(i).getName());
         }
     }
     @Test
-    public void testSAX(){
+    public void testLoadFromFileSAX(){
         List<Beer> beers = new ArrayList<>();
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser parser = factory.newSAXParser();
-            ExecutorSAX handler = new ExecutorSAX(beers);
+            ExecutorSAX handler = new ExecutorSAX(beers,tags);
             parser.parse(new File(xmlLink), handler);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new RuntimeException(e);
@@ -56,10 +61,10 @@ public class TestParser {
         }
     }
     @Test
-    public void testStAX(){
+    public void testLoadFromFileStAX(){
         List<Beer> beers = new ArrayList<>();
-        ExecutorStAX executorStAX = new ExecutorStAX(beers,xmlLink);
-        executorStAX.load_from_file();
+        ExecutorStAX executorStAX = new ExecutorStAX(beers,xmlLink,tags);
+        executorStAX.loadFromFile();
         for (int i = 0; i < beersResult.size(); i++) {
             assertEquals(beersResult.get(i).getName(), beers.get(i).getName());
         }

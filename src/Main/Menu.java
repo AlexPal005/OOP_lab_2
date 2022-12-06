@@ -3,6 +3,7 @@ package Main;
 import Parsers.ExecutorDOM;
 import Parsers.ExecutorSAX;
 import Parsers.ExecutorStAX;
+import Parsers.Tags;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,9 +19,11 @@ public class Menu {
     private List<Beer> beers;
     private final String xmlLink;
     private final String xsdLink;
-    public Menu(){
+    private Tags tags;
+    public Menu(Tags tags){
         xmlLink = "src\\Beers.xml";
         xsdLink = "src\\Beers.xsd";
+        this.tags = tags;
 
     }
     private void runDOM(){
@@ -34,7 +37,7 @@ public class Menu {
         beers.add(beer2);
         */
         beers = new ArrayList<>();
-        ExecutorDOM executor = new ExecutorDOM(beers, xmlLink);
+        ExecutorDOM executor = new ExecutorDOM(beers, xmlLink,tags);
         if(!XMLValidator.validate(xmlLink,xsdLink)){
             System.out.println("Error validation!");
         }
@@ -52,7 +55,7 @@ public class Menu {
             try {
                 SAXParserFactory factory = SAXParserFactory.newInstance();
                 SAXParser parser = factory.newSAXParser();
-                ExecutorSAX handler = new ExecutorSAX(beers);
+                ExecutorSAX handler = new ExecutorSAX(beers, tags);
                 parser.parse(new File(xmlLink), handler);
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 throw new RuntimeException(e);
@@ -66,25 +69,25 @@ public class Menu {
             System.out.println("Error validation!");
         }
         else{
-            ExecutorStAX executorStAX = new ExecutorStAX(beers, xmlLink);
-            executorStAX.load_from_file();
+            ExecutorStAX executorStAX = new ExecutorStAX(beers, xmlLink,tags);
+            executorStAX.loadFromFile();
         }
     }
     private void sort(){
         NumberTurnsComparator numberTurnsComparator = new NumberTurnsComparator();
         beers.sort(numberTurnsComparator);
-        System.out.println("Відсортоване по кількості оборотів!");
+        System.out.println("Sorted!");
     }
     public void showMenu(){
         Scanner in = new Scanner(System.in);
         while(true) {
-            System.out.println("------Меню-------");
+            System.out.println("------Menu-------");
             System.out.println("1. DOM parser");
             System.out.println("2. SAX parser");
             System.out.println("3. Stax parser");
-            System.out.println("4. Sort");
-            System.out.println("5. Очистити список");
-            System.out.print("Уведіть номер меню: ");
+            System.out.println("4. Sort by number turns");
+            System.out.println("5. Clear the list");
+            System.out.print("Enter the menu number: ");
             int number = in.nextInt();
             in.nextLine();
             switch (number) {
@@ -93,14 +96,14 @@ public class Menu {
                 case (3) -> runStAX();
                 case (4) -> sort();
                 case (5) -> {beers.clear();
-                    System.out.println("Очищено!");}
-                default -> System.out.println("Уведіть номер меню!");
+                    System.out.println("Cleared!");}
+                default -> System.out.println("Enter the menu number!");
             }
-            show_beers();
+            showBeers();
         }
 
     }
-    private void show_beers(){
+    private void showBeers(){
         for (Beer beer: beers) {
             System.out.println(beer);
         }

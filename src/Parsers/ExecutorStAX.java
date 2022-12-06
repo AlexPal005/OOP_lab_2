@@ -18,11 +18,13 @@ import javax.xml.stream.events.XMLEvent;
 public class ExecutorStAX {
     private List<Beer> beers;
     private final String link;
-    public ExecutorStAX(List<Beer> beers, String link){
+    private Tags tags;
+    public ExecutorStAX(List<Beer> beers, String link, Tags tags){
         this.beers = beers;
         this.link = link;
+        this.tags = tags;
     }
-    public void load_from_file(){
+    public void loadFromFile(){
         Beer beer = null;
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
         try {
@@ -33,9 +35,9 @@ public class ExecutorStAX {
                 if (xmlEvent.isStartElement()) {
                     StartElement startElement = xmlEvent.asStartElement();
 
-                    if (startElement.getName().getLocalPart().equals("Beer")) {
-                        Attribute idAttr = startElement.getAttributeByName(new QName("id"));
-                        Attribute nameAttr = startElement.getAttributeByName(new QName("name"));
+                    if (startElement.getName().getLocalPart().equals(tags.beer())) {
+                        Attribute idAttr = startElement.getAttributeByName(new QName(tags.id()));
+                        Attribute nameAttr = startElement.getAttributeByName(new QName(tags.name()));
 
                         if (idAttr != null && nameAttr != null) {
                            int id = Integer.parseInt(idAttr.getValue());
@@ -44,12 +46,12 @@ public class ExecutorStAX {
                                     0, 0, 0);
                         }
                     }
-                    set_values(startElement, reader, beer);
+                    setValues(startElement, reader, beer);
 
                 }
                 if (xmlEvent.isEndElement()) {
                     EndElement endElement = xmlEvent.asEndElement();
-                    if (endElement.getName().getLocalPart().equals("Beer")) {
+                    if (endElement.getName().getLocalPart().equals(tags.beer())) {
                         beers.add(beer);
                     }
                 }
@@ -59,39 +61,39 @@ public class ExecutorStAX {
             exc.printStackTrace();
         }
     }
-    private void set_values(StartElement startElement, XMLEventReader reader, Beer beer ){
+    private void setValues(StartElement startElement, XMLEventReader reader, Beer beer ){
         try{
             XMLEvent xmlEvent;
-            if (startElement.getName().getLocalPart().equals("type")) {
+            if (startElement.getName().getLocalPart().equals(tags.type())) {
                 xmlEvent = reader.nextEvent();
                 beer.setType(xmlEvent.asCharacters().getData());
             }
-            else if (startElement.getName().getLocalPart().equals("alcohol")) {
+            else if (startElement.getName().getLocalPart().equals(tags.alcohol())) {
                 xmlEvent = reader.nextEvent();
-                if(xmlEvent.asCharacters().getData().equals("Ні")){
+                if(xmlEvent.asCharacters().getData().equals("No")){
                     beer.setAl(false);
                 }
                 else{
                     beer.setAl(true);
                 }
             }
-            else if (startElement.getName().getLocalPart().equals("manufacturer")) {
+            else if (startElement.getName().getLocalPart().equals(tags.manufacturer())) {
                 xmlEvent = reader.nextEvent();
                 beer.setManufacturer(xmlEvent.asCharacters().getData());
             }
-            else if (startElement.getName().getLocalPart().equals("ingredients")) {
+            else if (startElement.getName().getLocalPart().equals(tags.ingredients())) {
                 xmlEvent = reader.nextEvent();
                 beer.setIngredients(xmlEvent.asCharacters().getData());
             }
-            else if (startElement.getName().getLocalPart().equals("number_turns")) {
+            else if (startElement.getName().getLocalPart().equals(tags.numberTurns())) {
                 xmlEvent = reader.nextEvent();
                 beer.setNumberTurns(Double.parseDouble(xmlEvent.asCharacters().getData()));
             }
-            else if (startElement.getName().getLocalPart().equals("transparency")) {
+            else if (startElement.getName().getLocalPart().equals(tags.transparency())) {
                 xmlEvent = reader.nextEvent();
                 beer.setTransparency(Double.parseDouble(xmlEvent.asCharacters().getData()));
             }
-            else if (startElement.getName().getLocalPart().equals("nutritional_value")) {
+            else if (startElement.getName().getLocalPart().equals(tags.nutritionalValue())) {
                 xmlEvent = reader.nextEvent();
                 beer.setNutritionalValue(Double.parseDouble(xmlEvent.asCharacters().getData()));
             }
